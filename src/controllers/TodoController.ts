@@ -2,7 +2,7 @@ import { Request, Response } from "express";
 
 import IController from "./ControllerInterfaces";
 
-class TodoController implements IController {
+class TodoController {
     index(req: Request, res: Response): Response {
         console.log(res.locals.user);
         return res.status(200).json({ "message": "ok" })
