@@ -1,15 +1,22 @@
 import { Request, Response } from "express";
-
 import IController from "./ControllerInterfaces";
+import UserService from "../services/UserService";
 
-class UserController implements IController {
-    index(req: Request, res: Response): Response {
-        console.log(res.locals.user);
-        return res.status(200).json({ "message": "ok" })
+const db = require("../db/models")
+
+class App implements IController {
+    index = async (req: Request, res: Response): Promise<Response> => {
+        const service: UserService = new UserService(req, res);
+        const result = await service.listing()
+        return res.status(result.status).json(result)
     }
-    create(req: Request, res: Response): Response {
-        return res.status(200).json({ "message": "ok", "data": req.body })
+
+    create = async (req: Request, res: Response): Promise<Response> => {
+        const service: UserService = new UserService(req, res);
+        const result = await service.store()
+        return res.status(result.status).json(result)
     }
+
     update(req: Request, res: Response): Response {
         let data: {} = {
             "message": "ok",
@@ -39,4 +46,4 @@ class UserController implements IController {
     }
 }
 
-export default new UserController();
+export default new App();
