@@ -22,25 +22,17 @@ class App implements IController {
         const result = await service.getDetail()
         return res.status(result.status).json(result)
     }
-
-    update(req: Request, res: Response): Response {
-        let data: {} = {
-            "message": "ok",
-            "id": req.params.id,
-            "data": req.body
-        }
-
-        return res.status(200).json(data)
+    
+    update = async (req: Request, res: Response): Promise<Response> => {
+        const service: ProductService = new ProductService(req, res);
+        const result = await service.updateDetail()
+        return res.status(result.status).json(result)
     }
-
-    delete(req: Request, res: Response): Response {
-        let data: {} = {
-            "message": "ok",
-            "id": req.params.id,
-            "data": req.body
-        }
-
-        return res.status(200).json(data)
+    
+    delete = async (req: Request, res: Response): Promise<Response> => {
+        const service: ProductService = new ProductService(req, res);
+        const result = await service.deleteDetail()
+        return res.status(result.status).json(result)
     }
 }
 

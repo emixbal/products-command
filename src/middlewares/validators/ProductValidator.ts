@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 import { check, validationResult } from "express-validator"
 
-export const validateCreate = [
+export const validateAllForm = [
     check('name').isString(),
     check('name').isLength({ min: 2 }),
     check('price').isNumeric(),
