@@ -37,7 +37,7 @@ class App {
         v1.use('/todos', TodoRoutes);
         v1.use('/products', ProductRoutes);
 
-        this.app.use('/v1', v1);
+        this.app.use('/', v1);
 
     }
 }
