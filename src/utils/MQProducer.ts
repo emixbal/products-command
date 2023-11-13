@@ -3,18 +3,17 @@ import * as amqp from 'amqplib';
 class MQProducer {
     private connection: amqp.Connection | null = null;
 
-    constructor(private connectionString: string) { }
-
     async sendMessages(queueName: string, data: string): Promise<boolean> {
         try {
-            this.connection = await amqp.connect(this.connectionString);
+            const connectionString = process.env.AMQP_HOST || 'amqp://127.0.0.1';
+            this.connection = await amqp.connect(connectionString);
             const channel = await this.connection.createChannel();
 
             channel.sendToQueue(queueName, Buffer.from(data));
 
         } catch (error) {
             console.warn(error);
-            return false
+            return false;
         } finally {
             // Close the connection after using.
             if (this.connection) {
@@ -22,11 +21,12 @@ class MQProducer {
             }
         }
         
-        return true
+        return true;
     }
 }
 
 export default MQProducer;
 
-// const rabbitMQProducer = new MQProducer('amqp://127.0.0.1');
+// contoh penggunaan:
+// const rabbitMQProducer = new MQProducer();
 // rabbitMQProducer.produceMessages("queue1", "okkk");
