@@ -4,7 +4,7 @@ import UserService from "../services/UserService";
 
 const db = require("../db/models")
 
-class App implements IController {
+class App {
     index = async (req: Request, res: Response): Promise<Response> => {
         const service: UserService = new UserService(req, res);
         const result = await service.listing()
