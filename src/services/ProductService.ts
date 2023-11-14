@@ -35,34 +35,26 @@ class ProductService extends BaseService {
         }
 
         // simpan ke database
-        const t = await sequelize.transaction()
+        const tr = await sequelize.transaction()
         try {
-            product = await db.product.create(product, { transaction: t })
+            product = await db.product.create(product, { transaction: tr })
         } catch (error) {
             console.log(error);
             return respons(500, "something went wrong", null)
         }
 
-        const rabbitMQProducer = new MQProducer();
-        let retryCount = 0;
-        let isSend = await rabbitMQProducer.sendMessages("product-save", JSON.stringify(product));
-
-        // Ulangi pengiriman hingga 3 kali jika isSend adalah false
-        while (!isSend && retryCount < 3) {
-            retryCount++;
-            console.warn(`Failed to send message. Retrying attempt ${retryCount}...`);
-            isSend = await rabbitMQProducer.sendMessages("product-save", JSON.stringify(product));
+        try {
+            const rabbitMQProducer = new MQProducer();
+            await rabbitMQProducer.sendMessageRetry("product-save", JSON.stringify(product), 3)
+        } catch (error) {
+            console.log("============== ERROR ==============");
+            await tr.rollback();
+            return respons(500, "something went wrong", null);
         }
 
-        // jika masih gagal juga
-        if (!isSend) {
-            // We rollback the transaction karena kirim data ke message broker gagal.
-            await t.rollback();
-            return respons(500, "Failed to send message after 3 attempts", null);
-        }
-
-        // averything ok
-        await t.commit();
+        // Everything ok
+        console.log("============== SUKSES ==============");
+        await tr.commit();
         return respons(200, "ok", product)
     }
 
