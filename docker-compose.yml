@@ -2,7 +2,7 @@ version: '3'
 
 services:
   web:
-    container_name: products_command
+    container_name: products_query
     build:
       context: .
       dockerfile: Dockerfile
