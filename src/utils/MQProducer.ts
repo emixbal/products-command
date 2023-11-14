@@ -3,6 +3,13 @@ import * as amqp from 'amqplib';
 class MQProducer {
     private connection: amqp.Connection | null = null;
 
+    /**
+     * 
+     * @param queueName Merupakan nama queue dari channel
+     * @param data Berisi data yang akan dikirim. Jika belum berupa string maka konversi ke string dulu. Misalnya JSON.stringty({}||[])
+     * 
+     * @returns Promise return berupa true atau false.
+     */
     async sendMessages(queueName: string, data: string): Promise<boolean> {
         try {
             const connectionString = process.env.AMQP_HOST;
