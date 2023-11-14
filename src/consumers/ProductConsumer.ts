@@ -3,12 +3,12 @@ import * as amqp from 'amqplib';
 const db = require("../db/models")
 
 // Example usage:
-// const rabbitMQHandler = new RabbitMQHandler('amqp://127.0.0.1');
+// const rabbitMQHandler = new RabbitMQHandler();
 // rabbitMQHandler.connect();
 
 class RabbitMQHandler {
     private connection: amqp.Connection | null = null;
-    private connectionString: string = 'amqp://127.0.0.1'
+    private connectionString: string = process.env.AMPQ_HOST || 'amqp://127.0.0.1'
 
     constructor() { }
 
