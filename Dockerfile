@@ -26,8 +26,6 @@ COPY .env ./
 CMD [ "npm", "start" ]
 
 # Exposing server port
-EXPOSE 1111
-
-# docker run -d -it --rm -p 1111:1111 –name node_products_command nodejs-product-coomand:latest
+EXPOSE 2222
 
 # docker run -d --name node_products_command -p 1111:1111 nodejs-product-coomand:latest
