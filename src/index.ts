@@ -8,17 +8,20 @@ import { config as dotenv } from "dotenv";
 
 import UserRoutes from "./routes/UserRoutes";
 import AuthRoutes from "./routes/AuthRoutes";
-import TodoRoutes from "./routes/TodoRoutes";
 import ProductRoutes from "./routes/ProductRoutes";
+
+import ProductConsumer from "./consumers/ProductConsumer";
 
 class App {
     public app: Application;
+    protected rabbitMQHandler = new ProductConsumer();
 
     constructor() {
         this.app = express();
         dotenv();
         this.plugins();
         this.routes();
+        this.rabbitMQHandler.connect();
     }
 
     protected plugins(): void {
@@ -34,11 +37,9 @@ class App {
 
         v1.use('/users', UserRoutes);
         v1.use('/auth', AuthRoutes);
-        v1.use('/todos', TodoRoutes);
         v1.use('/products', ProductRoutes);
 
         this.app.use('/', v1);
-
     }
 }
 

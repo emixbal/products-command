@@ -2,12 +2,12 @@ version: '3'
 
 services:
   web:
-    container_name: products_command
+    container_name: products_query
     build:
       context: .
       dockerfile: Dockerfile
     ports:
-      - "1111:1111"
+      - "2222:2222"
     env_file:
       - .env
     volumes:
