@@ -11,14 +11,18 @@ import AuthRoutes from "./routes/AuthRoutes";
 import TodoRoutes from "./routes/TodoRoutes";
 import ProductRoutes from "./routes/ProductRoutes";
 
+import ProductConsumer from "./consumers/ProductConsumer";
+
 class App {
     public app: Application;
+    rabbitMQHandler = new ProductConsumer();
 
     constructor() {
         this.app = express();
         dotenv();
         this.plugins();
         this.routes();
+        this.rabbitMQHandler.connect();
     }
 
     protected plugins(): void {
