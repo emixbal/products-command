@@ -5,6 +5,7 @@ import BaseService from './BaseService'
 const db = require("../db/models")
 import { respons } from "../helpers/format";
 import MQProducer from '../utils/MQProducer'
+import { sequelize } from '../db/models';
 
 class ProductService extends BaseService {
     /**
@@ -34,7 +35,7 @@ class ProductService extends BaseService {
         }
 
         // simpan ke database
-        const t = await db.transaction();
+        const t = await sequelize.transaction()
         try {
             product = await db.product.create(product, { transaction: t })
         } catch (error) {
