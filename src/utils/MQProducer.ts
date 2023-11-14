@@ -5,7 +5,14 @@ class MQProducer {
 
     async sendMessages(queueName: string, data: string): Promise<boolean> {
         try {
-            const connectionString = process.env.AMQP_HOST || 'amqp://127.0.0.1';
+            const connectionString = process.env.AMQP_HOST;
+            
+            if (!connectionString) {
+                console.log("connectionString err", connectionString);
+                
+                return false;
+            }
+
             this.connection = await amqp.connect(connectionString);
             const channel = await this.connection.createChannel();
 
@@ -20,7 +27,7 @@ class MQProducer {
                 setTimeout(() => this.connection?.close(), 500);
             }
         }
-        
+
         return true;
     }
 }
